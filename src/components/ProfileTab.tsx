@@ -32,7 +32,7 @@ export default function ProfileTab() {
 
   return (
     <div className="min-h-screen p-8">
-      <div className="max-w-3xl mx-auto">
+      <div className="w-full h-full">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-green-400 to-blue-500 p-8">
             <div className="flex items-center space-x-6">

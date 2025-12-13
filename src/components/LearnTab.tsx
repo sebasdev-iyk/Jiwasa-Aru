@@ -76,6 +76,10 @@ function FlyToBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
   return null;
 }
 
+import CulturaVivaCard from './CulturaVivaCard';
+
+// ... (existing imports)
+
 export default function LearnTab() {
   const { profile, refreshProfile } = useAuth();
   const [lessons, setLessons] = useState<Lesson[]>([]);
@@ -83,6 +87,7 @@ export default function LearnTab() {
   const [loading, setLoading] = useState(true);
   const [targetBounds, setTargetBounds] = useState<L.LatLngBoundsExpression | null>(null);
   const [isDesaguaderoExpanded, setIsDesaguaderoExpanded] = useState(false);
+  const [showCulturaCard, setShowCulturaCard] = useState(true);
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
   useEffect(() => {
@@ -257,22 +262,24 @@ export default function LearnTab() {
     );
   }
 
-  if (activeLesson) {
-    return (
-      <LessonView
-        lessonTitle={activeLesson}
-        onComplete={(score) => {
-          alert(`Lección completada con puntuación: ${score}`);
-          setActiveLesson(null);
-          // Here you would update the backend progress
-        }}
-        onClose={() => setActiveLesson(null)}
-      />
-    );
-  }
-
   return (
     <div className="h-full flex flex-col relative">
+      {activeLesson && (
+        <LessonView
+          lessonTitle={activeLesson}
+          onComplete={(score) => {
+            console.log(`Lesson ${activeLesson} completed with score ${score}`);
+            setActiveLesson(null);
+            // Here you would update the backend progress
+          }}
+          onClose={() => setActiveLesson(null)}
+        />
+      )}
+
+      {isDesaguaderoExpanded && showCulturaCard && (
+        <CulturaVivaCard onClose={() => setShowCulturaCard(false)} />
+      )}
+
       <div className="absolute top-6 right-6 bg-white rounded-2xl shadow-lg px-6 py-4 flex items-center space-x-3 z-[1000]">
         <Heart className="w-6 h-6 text-red-500 fill-red-500" />
         <span className="text-2xl font-bold text-gray-800">{profile?.lives || 0}</span>

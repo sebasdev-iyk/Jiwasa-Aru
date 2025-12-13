@@ -23,38 +23,34 @@ const SALUDOS_QUESTIONS: Question[] = [
     {
         id: '1',
         type: 'multiple-choice',
-        question: '¿Cómo se dice "Hola" en Aymara?',
-        options: ['Kamisaraki', 'Jikisiñkama', 'Waliki', 'Aski urukipan'],
+        question: '¿Cómo se dice "Hola" en aymara?',
+        options: ['Kamisaraki', 'Waliki', 'Jikisiñkama', 'Aski urukipana'],
         correctAnswer: 'Kamisaraki'
     },
     {
         id: '2',
         type: 'completion',
-        question: 'Completa la frase: "______ urukipan" (Buenos días)',
-        options: ['Aski', 'Suma', 'Wali', 'Jach\'a'],
+        question: 'Completa el saludo: "__ urukipana" (Buenos días)',
+        options: ['Aski', 'Waliki', 'Suma', 'Jach’a'],
         correctAnswer: 'Aski'
     },
     {
         id: '3',
-        type: 'true-false',
-        question: '"Jikisiñkama" significa "Hasta luego".',
-        correctAnswer: 'true'
+        type: 'multiple-choice',
+        question: '¿Qué significa "Kamisaraki"?',
+        options: ['Buenas noches', '¿Cómo estás?', 'Hasta luego', 'Estoy bien'],
+        correctAnswer: '¿Cómo estás?'
     },
     {
         id: '4',
-        type: 'matching',
-        question: 'Relaciona las palabras con su significado',
-        pairs: [
-            { left: 'Kamisaraki', right: '¿Cómo estás?' },
-            { left: 'Waliki', right: 'Bien' },
-            { left: 'Jikisiñkama', right: 'Hasta luego' }
-        ],
-        correctAnswer: 'matching-check' // Special handling for matching
+        type: 'true-false',
+        question: '"Jikisiñkama" se usa para despedirse.',
+        correctAnswer: 'true'
     },
     {
         id: '5',
         type: 'text-input',
-        question: 'Escribe la palabra que falta: "______" (Bien)',
+        question: 'Escribe la palabra correcta para decir "Estoy bien":',
         correctAnswer: 'Waliki'
     }
 ];
