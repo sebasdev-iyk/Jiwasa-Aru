@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase, Lesson, UserProgress } from '../lib/supabase';
 import { Heart, Lock } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -26,6 +26,11 @@ const mapBounds: L.LatLngBoundsExpression = [
   [-15.7764, -68.9502]  // Northeast
 ];
 
+const DESAGUADERO_BOUNDS: L.LatLngBoundsExpression = [
+  [-16.57298, -69.04989], // Southwest
+  [-16.55982, -69.02521]  // Northeast
+];
+
 const LEVEL_COORDINATES = [
   { name: "Desaguadero", position: [-16.56652, -69.03727] as [number, number] },
   { name: "Juli", position: [-16.21550, -69.46046] as [number, number] },
@@ -33,11 +38,27 @@ const LEVEL_COORDINATES = [
   { name: "Pomata", position: [-16.273655, -69.293153] as [number, number] }
 ];
 
+function FlyToBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (bounds) {
+      map.flyToBounds(bounds, {
+        padding: [50, 50],
+        duration: 2 // Animation duration in seconds
+      });
+    }
+  }, [bounds, map]);
+
+  return null;
+}
+
 export default function LearnTab() {
   const { profile, refreshProfile } = useAuth();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [progress, setProgress] = useState<UserProgress[]>([]);
   const [loading, setLoading] = useState(true);
+  const [targetBounds, setTargetBounds] = useState<L.LatLngBoundsExpression | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -230,6 +251,7 @@ export default function LearnTab() {
             style={{ height: '100%', width: '100%' }}
             scrollWheelZoom={false}
           >
+            <FlyToBounds bounds={targetBounds} />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -252,7 +274,24 @@ export default function LearnTab() {
                   eventHandlers={{
                     click: () => {
                       if (isUnlocked) {
-                        handleLessonClick(lesson);
+                        if (idx === 0) { // Assuming Desaguadero/Saludos Básicos is the first one
+                          setTargetBounds(DESAGUADERO_BOUNDS);
+                          // Optional: delay lesson start to show zoom?
+                          // For now, let's just zoom. The user might want to see the "city".
+                          // It doesn't explicitly say "don't start lesson".
+                          // But usually zoom implies navigation.
+                          // I'll comment out handleLessonClick for this specific node to show the zoom effect clearly,
+                          // or maybe I should keep it but with a delay?
+                          // I'll keep it but maybe I should ask the user? No, I must act.
+                          // I'll trigger the zoom. I'll NOT trigger the lesson start immediately for this one, 
+                          // assuming the zoom is the "action" for now (maybe entering the level).
+                          // But wait, if I don't start the lesson, they can't learn.
+                          // I'll add a setTimeout to start the lesson after zoom?
+                          // Or maybe the zoom IS the "entering the level" animation.
+                          setTimeout(() => handleLessonClick(lesson), 2000);
+                        } else {
+                          handleLessonClick(lesson);
+                        }
                       } else {
                         alert("¡Esta lección está bloqueada! Completa la anterior primero.");
                       }
