@@ -40,8 +40,8 @@ export default function Layout() {
             <button
               onClick={() => setActiveTab('learn')}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-200 ${activeTab === 'learn'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
               <BookOpen className="w-5 h-5" />
@@ -51,19 +51,19 @@ export default function Layout() {
             <button
               onClick={() => setActiveTab('tabo')}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-200 ${activeTab === 'tabo'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
               <Heart className="w-5 h-5" />
-              <span className="font-semibold">Tabo</span>
+              <span className="font-semibold">Tambo</span>
             </button>
 
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-200 ${activeTab === 'profile'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
               <User className="w-5 h-5" />

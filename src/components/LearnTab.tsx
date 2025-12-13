@@ -240,7 +240,7 @@ export default function LearnTab() {
         <span className="text-2xl font-bold text-gray-800">{profile?.lives || 0}</span>
       </div>
 
-      <div className="flex-1 w-full h-full relative z-0 border-4 border-white">
+      <div className="flex-1 w-full h-full relative z-0 border-8 border-white rounded-3xl overflow-hidden">
         <MapContainer
           bounds={mapBounds}
           style={{ height: '100%', width: '100%' }}

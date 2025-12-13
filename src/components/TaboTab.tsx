@@ -35,7 +35,26 @@ export default function TaboTab() {
         .limit(5);
 
       if (error) throw error;
-      setQuestions(data || []);
+      const newQuestions: QuizQuestion[] = [
+        {
+          id: 'custom-1',
+          question: '¿Qué danza emblemática de Puno representa la lucha entre el bien y el mal, y es protagonizada por el Arcángel San Miguel enfrentándose a una legión de demonios?',
+          option_a: 'La Morenada',
+          option_b: 'La Diablada',
+          option_c: 'Los Caporales',
+          correct_answer: 'B'
+        },
+        {
+          id: 'custom-2',
+          question: 'Además de los Uros, ¿qué isla del Lago Titicaca es mundialmente famosa por su fino arte textil, el cual fue proclamado como "Obra Maestra del Patrimonio Oral e Inmaterial de la Humanidad" por la UNESCO?',
+          option_a: 'Isla Amantaní',
+          option_b: 'Isla del Sol',
+          option_c: 'Isla Taquile',
+          correct_answer: 'C'
+        }
+      ];
+
+      setQuestions([...(data || []), ...newQuestions]);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching questions:', error);
@@ -201,15 +220,14 @@ export default function TaboTab() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          answered
+                        className={`w-8 h-8 rounded-full flex items-center justify-center ${answered
                             ? option.key === currentQuestion.correct_answer
                               ? 'bg-green-500'
                               : option.key === selectedAnswer
-                              ? 'bg-red-500'
-                              : 'bg-gray-300'
+                                ? 'bg-red-500'
+                                : 'bg-gray-300'
                             : 'bg-blue-500'
-                        } text-white font-bold`}
+                          } text-white font-bold`}
                       >
                         {option.key}
                       </div>
