@@ -41,6 +41,11 @@ const NUMEROS_BOUNDS: L.LatLngBoundsExpression = [
   [-16.20594, -69.44887]  // Northeast
 ];
 
+const COLORES_BOUNDS: L.LatLngBoundsExpression = [
+  [-16.09291, -69.65770], // Southwest
+  [-16.06829, -69.62581]  // Northeast
+];
+
 const LEVEL_COORDINATES = [
   { name: "Desaguadero", position: [-16.56652, -69.03727] as [number, number] },
   { name: "Juli", position: [-16.21550, -69.46046] as [number, number] },
@@ -296,6 +301,9 @@ export default function LearnTab() {
                         setTimeout(() => handleLessonClick(lesson), 2000);
                       } else if (idx === 1) { // Juli / Numeros
                         setTargetBounds(NUMEROS_BOUNDS);
+                        setTimeout(() => handleLessonClick(lesson), 2000);
+                      } else if (idx === 2) { // Ilave / Colores
+                        setTargetBounds(COLORES_BOUNDS);
                         setTimeout(() => handleLessonClick(lesson), 2000);
                       } else if (idx === 3) { // Pomata / Familia
                         setTargetBounds(FAMILIA_BOUNDS);
