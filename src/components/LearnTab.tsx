@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker, useMap, Polyline } from 'react-leaflet
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
+import LessonView from './LessonView';
 
 // Fix for default marker icon
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -82,6 +83,7 @@ export default function LearnTab() {
   const [loading, setLoading] = useState(true);
   const [targetBounds, setTargetBounds] = useState<L.LatLngBoundsExpression | null>(null);
   const [isDesaguaderoExpanded, setIsDesaguaderoExpanded] = useState(false);
+  const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -255,6 +257,20 @@ export default function LearnTab() {
     );
   }
 
+  if (activeLesson) {
+    return (
+      <LessonView
+        lessonTitle={activeLesson}
+        onComplete={(score) => {
+          alert(`Lección completada con puntuación: ${score}`);
+          setActiveLesson(null);
+          // Here you would update the backend progress
+        }}
+        onClose={() => setActiveLesson(null)}
+      />
+    );
+  }
+
   return (
     <div className="h-full flex flex-col relative">
       <div className="absolute top-6 right-6 bg-white rounded-2xl shadow-lg px-6 py-4 flex items-center space-x-3 z-[1000]">
@@ -330,8 +346,11 @@ export default function LearnTab() {
                   icon={createCustomMarkerIcon(subLevel.name, subLevel.icon, true, false, 0, 'green')}
                   eventHandlers={{
                     click: () => {
-                      alert(`Has seleccionado el nivel: ${subLevel.name}`);
-                      // Here you would link to the specific lesson logic
+                      if (subLevel.name === 'Saludos') {
+                        setActiveLesson('Saludos');
+                      } else {
+                        alert(`Has seleccionado el nivel: ${subLevel.name}`);
+                      }
                     }
                   }}
                 />
