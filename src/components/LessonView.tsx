@@ -64,6 +64,11 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
+    const [userPhoto, setUserPhoto] = useState<string | null>(null);
+    const [showCamera, setShowCamera] = useState(false);
+    const [cameraError, setCameraError] = useState<string | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const [draggedOption, setDraggedOption] = useState<string | null>(null);
 
@@ -222,6 +227,58 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
         }
     };
 
+    const startCamera = async () => {
+        try {
+            setShowCamera(true);
+            setCameraError(null);
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+            setCameraError("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
+        }
+    };
+
+    const stopCamera = () => {
+        if (videoRef.current && videoRef.current.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            videoRef.current.srcObject = null;
+        }
+        setShowCamera(false);
+    };
+
+    const takePhoto = () => {
+        if (videoRef.current && canvasRef.current) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            const context = canvas.getContext('2d');
+
+            if (context) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/png');
+                setUserPhoto(dataUrl);
+                stopCamera();
+            }
+        }
+    };
+
+    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUserPhoto(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleShare = (platform: 'whatsapp' | 'twitter' | 'facebook' | 'instagram') => {
         const userName = profile?.username || 'un estudiante';
         const text = `Soy ${userName} y he completado la lección "${lessonTitle}" en Jiwasa Aru! 🚀 He acertado ${score} de ${SALUDOS_QUESTIONS.length} preguntas.`;
@@ -277,10 +334,46 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
                     </div>
                 </div>
 
+                {/* Camera Modal */}
+                {showCamera && (
+                    <div className="fixed inset-0 z-[2200] bg-black flex flex-col items-center justify-center">
+                        <div className="relative w-full max-w-md aspect-[3/4] bg-black">
+                            <video
+                                ref={videoRef}
+                                autoPlay
+                                playsInline
+                                className="w-full h-full object-cover"
+                            />
+                            <canvas ref={canvasRef} className="hidden" />
+                        </div>
+
+                        {cameraError && (
+                            <div className="absolute top-4 left-4 right-4 bg-red-500 text-white p-3 rounded-lg text-center">
+                                {cameraError}
+                            </div>
+                        )}
+
+                        <div className="absolute bottom-8 left-0 right-0 flex justify-center items-center space-x-8">
+                            <button
+                                onClick={stopCamera}
+                                className="px-6 py-3 bg-gray-800 text-white rounded-full font-bold"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={takePhoto}
+                                className="w-20 h-20 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center"
+                            >
+                                <div className="w-16 h-16 bg-white rounded-full border-2 border-black" />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Share Modal */}
-                {showShareModal && (
+                {showShareModal && !showCamera && (
                     <div className="fixed inset-0 z-[2100] bg-black/50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl p-6 w-full max-w-sm relative">
+                        <div className="bg-white rounded-2xl p-6 w-full max-w-sm max-h-[90vh] overflow-y-auto relative">
                             <button
                                 onClick={() => setShowShareModal(false)}
                                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10"
@@ -291,23 +384,49 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
                             <h3 className="text-2xl font-bold text-center mb-6">¡Comparte tu logro!</h3>
 
                             {/* Share Card Preview */}
-                            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-6 mb-6 text-white shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="font-bold text-lg opacity-90">Jiwasa Aru</span>
-                                    <div className="bg-white/20 p-1.5 rounded-lg">
-                                        <Share2 className="w-4 h-4 text-white" />
+                            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-6 mb-6 text-white shadow-lg transform rotate-1 hover:rotate-0 transition-transform duration-300 relative overflow-hidden">
+                                {userPhoto && (
+                                    <div className="absolute inset-0 z-0 opacity-30">
+                                        <img src={userPhoto} alt="User" className="w-full h-full object-cover" />
+                                    </div>
+                                )}
+                                <div className="relative z-10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <span className="font-bold text-lg opacity-90">Jiwasa Aru</span>
+                                        <div className="bg-white/20 p-1.5 rounded-lg">
+                                            <Share2 className="w-4 h-4 text-white" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <p className="text-indigo-100 text-sm font-medium">¡Lección Completada!</p>
+                                        <p className="text-xl font-bold leading-tight">
+                                            Soy {profile?.username || 'un estudiante'} y he completado {lessonTitle}
+                                        </p>
+                                    </div>
+                                    <div className="mt-4 flex items-center space-x-2 text-xs text-indigo-200">
+                                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                                        <span>Aymara Learning</span>
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <p className="text-indigo-100 text-sm font-medium">¡Lección Completada!</p>
-                                    <p className="text-xl font-bold leading-tight">
-                                        Soy {profile?.username || 'un estudiante'} y he completado {lessonTitle}
-                                    </p>
-                                </div>
-                                <div className="mt-4 flex items-center space-x-2 text-xs text-indigo-200">
-                                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                                    <span>Aymara Learning</span>
-                                </div>
+                            </div>
+
+                            {/* Photo Actions */}
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                <button
+                                    onClick={startCamera}
+                                    className="flex flex-col items-center justify-center p-3 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-200 transition"
+                                >
+                                    <span className="text-sm font-bold text-gray-700">Tomar Foto</span>
+                                </button>
+                                <label className="flex flex-col items-center justify-center p-3 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-200 transition">
+                                    <span className="text-sm font-bold text-gray-700">Subir Foto</span>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handlePhotoUpload}
+                                    />
+                                </label>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
