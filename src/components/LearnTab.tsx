@@ -60,7 +60,8 @@ const DESAGUADERO_SUBLEVELS = [
   { name: "Saludos", position: [-16.567064, -69.030983] as [number, number], icon: "Hand" },
   { name: "Colores", position: [-16.568442, -69.034229] as [number, number], icon: "Palette" },
   { name: "Animales", position: [-16.567254, -69.035736] as [number, number], icon: "Cat" },
-  { name: "Repaso", position: [-16.560181, -69.039620] as [number, number], icon: "Star" }
+  { name: "Repaso", position: [-16.560181, -69.039620] as [number, number], icon: "Star" },
+  { name: "Bonus", position: [-16.570, -69.042] as [number, number], icon: "Gift" }
 ];
 
 const YUNGUYO_SUBLEVELS = [
@@ -420,6 +421,8 @@ export default function LearnTab() {
                         setActiveLesson('Saludos');
                       } else if (subLevel.name === 'Colores') {
                         setActiveLesson('Colores');
+                      } else if (subLevel.name === 'Bonus') {
+                        setActiveLesson('Bonus');
                       } else {
                         alert(`Has seleccionado el nivel: ${subLevel.name}`);
                       }

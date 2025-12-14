@@ -121,6 +121,50 @@ export const COLORES_QUESTIONS: Question[] = [
     }
 ];
 
+export const BONUS_QUESTIONS: Question[] = [
+    {
+        id: 1,
+        type: 'multiple-choice',
+        question: 'Para poner un aviso de venta, ¿qué verbo significa "Vender"?',
+        options: ['Alaña', 'Alxaña', 'Churana', 'Mayt\'aña'],
+        correctAnswer: 'Alxaña'
+    },
+    {
+        id: 2,
+        type: 'matching',
+        question: 'Une el adjetivo que usarías en una publicidad para describir la ropa:',
+        pairs: [
+            { left: 'Machaqa', right: 'Nuevo' },
+            { left: 'Thantha', right: 'Usado / Viejo' },
+            { left: 'Suma', right: 'Bueno / Hermoso' },
+            { left: 'Jach\'a', right: 'Grande (Talla)' }
+        ]
+    },
+    {
+        id: 3,
+        type: 'text-input',
+        question: 'Si quieres preguntar u ofrecer un "Precio" o "Costo", la palabra es:',
+        correctAnswer: 'Chani'
+    },
+    {
+        id: 4,
+        type: 'multiple-choice',
+        question: 'En una publicidad de ropa, ¿cómo dirías "Poncho rojo"?',
+        options: ['Punchu wila', 'Chupika punchu', 'Wila isi', 'Punchu chupika'],
+        correctAnswer: 'Chupika punchu'
+    },
+    {
+        id: 5,
+        type: 'ordering',
+        question: 'Ordena la frase publicitaria "Vendo ropa nueva":',
+        orderItems: [
+            { id: 'o1', text: 'Machaqa (Nueva)', order: 1 },
+            { id: 'o2', text: 'Isi (Ropa)', order: 2 },
+            { id: 'o3', text: 'Alxtha (Vendo)', order: 3 }
+        ]
+    }
+];
+
 export default function LessonView({ lessonTitle, onComplete, onClose }: LessonViewProps) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -154,7 +198,7 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
     const rightRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const questions = lessonTitle === 'Ilave Marka' || lessonTitle === 'Colores' ? COLORES_QUESTIONS : SALUDOS_QUESTIONS;
+    const questions = lessonTitle === 'Ilave Marka' || lessonTitle === 'Colores' ? COLORES_QUESTIONS : lessonTitle === 'Bonus' ? BONUS_QUESTIONS : SALUDOS_QUESTIONS;
     const currentQuestion = questions[currentQuestionIndex];
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
