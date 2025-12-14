@@ -283,11 +283,14 @@ export default function LearnTab() {
 
     const bgColor = isCompleted ? colorMap['yellow'] : (isUnlocked ? (colorMap[color] || colorMap['blue']) : colorMap['gray']);
 
+    const isDesaguadero = title === 'Desaguadero Marka';
+    const borderClass = isDesaguadero ? 'border-4 border-yellow-400 ring-4 ring-yellow-400/30' : 'border-4 border-white';
+
     const iconMarkup = renderToStaticMarkup(
       <div className="relative flex flex-col items-center justify-center">
         <div
           style={{ backgroundColor: bgColor }}
-          className={`w-16 h-16 rounded-full shadow-xl flex items-center justify-center border-4 border-white transition-transform hover:scale-110 ${!isUnlocked ? 'opacity-75' : ''} overflow-hidden`}
+          className={`w-16 h-16 rounded-full shadow-xl flex items-center justify-center ${borderClass} transition-transform hover:scale-110 ${!isUnlocked ? 'opacity-75' : ''} overflow-hidden`}
         >
           {(() => {
             const SECTION_ICONS: Record<string, string> = {
@@ -417,6 +420,19 @@ export default function LearnTab() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
+          {/* Main Path connecting Markas */}
+          <Polyline
+            positions={[
+              [-16.56652, -69.03727], // Desaguadero
+              [-16.2463, -69.09132],  // Yunguyo
+              [-16.21550, -69.46046], // Juli
+              [-16.08763, -69.63864], // Ilave
+              [-15.894558, -69.889923], // Chucuito
+              [-15.45794, -69.43709]  // Conima
+            ]}
+            pathOptions={{ color: '#a855f7', weight: 6, opacity: 0.8, lineCap: 'round', dashArray: '15, 15' }}
+          />
+
           {/* Main Level Markers */}
           {lessons.map((lesson, idx) => {
             const coordinate = LEVEL_COORDINATES[idx];
@@ -434,7 +450,12 @@ export default function LearnTab() {
             const lessonProgress = progress.find((p) => p.lesson_id === lesson.id);
             const isUnlocked = isLessonUnlocked(lesson);
             const isCompleted = lessonProgress?.completed || false;
-            const stars = lessonProgress?.stars || 0;
+
+            // Hide stars for Ilave and Yunguyo as requested
+            let stars = lessonProgress?.stars || 0;
+            if (lesson.title === 'Ilave Marka' || lesson.title === 'Yunguyo Marka') {
+              stars = 0;
+            }
 
             return (
               <Marker
