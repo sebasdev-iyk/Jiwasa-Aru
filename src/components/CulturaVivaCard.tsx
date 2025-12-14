@@ -10,7 +10,7 @@ export default function CulturaVivaCard({ onClose }: CulturaVivaCardProps) {
     return (
         <div className="absolute bottom-4 left-4 z-[1000] w-80 bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-yellow-400 animate-in slide-in-from-bottom-10 fade-in duration-500">
             <div className="bg-yellow-400 p-3 flex justify-between items-center">
-                <h3 className="font-bold text-yellow-900 text-sm">DESAGUADERO, Paso Binacional</h3>
+                <h3 className="font-bold text-yellow-900 text-sm">DESAGUADERO</h3>
                 <button onClick={onClose} className="text-yellow-900 hover:bg-yellow-500/20 rounded-full p-1">
                     <X size={16} />
                 </button>
@@ -24,7 +24,7 @@ export default function CulturaVivaCard({ onClose }: CulturaVivaCardProps) {
                 <div className="space-y-4">
                     <div className="bg-gray-50 rounded-xl p-3 space-y-3 border border-gray-100">
                         <div className="flex items-start gap-2">
-                            <span className="text-base">🎉</span>
+                            <span className="text-base"></span>
                             <div>
                                 <span className="font-bold text-gray-800 text-xs block mb-1">Festividad de la Virgen de la Natividad (Patrona)</span>
                                 <span className="text-xs text-gray-600 block mb-2">(Septiembre, alrededor del 8)</span>
@@ -44,7 +44,7 @@ export default function CulturaVivaCard({ onClose }: CulturaVivaCardProps) {
 
                     <div className="bg-gray-50 rounded-xl p-3 space-y-3 border border-gray-100">
                         <div className="flex items-start gap-2">
-                            <span className="text-base">✝️</span>
+                            <span className="text-base"></span>
                             <div>
                                 <span className="font-bold text-gray-800 text-xs block mb-1">Procesión del Señor de los Milagros</span>
                                 <span className="text-xs text-gray-600 block mb-2">(Octubre)</span>
