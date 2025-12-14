@@ -51,7 +51,8 @@ const LEVEL_COORDINATES = [
   { name: "Desaguadero Marka", position: [-16.56652, -69.03727] as [number, number] },
   { name: "Juli Marka", position: [-16.21550, -69.46046] as [number, number] },
   { name: "Ilave Marka", position: [-16.08763, -69.63864] as [number, number] },
-  { name: "Yunguyo Marka", position: [-16.2463, -69.09132] as [number, number] }
+  { name: "Yunguyo Marka", position: [-16.2463, -69.09132] as [number, number] },
+  { name: "Conima Marka", position: [-15.45794, -69.43709] as [number, number] }
 ];
 
 const DESAGUADERO_SUBLEVELS = [
@@ -117,7 +118,7 @@ export default function LearnTab() {
 
       if (progressError) throw progressError;
 
-      const modifiedLessons = (lessonsData || []).map(lesson => {
+      const modifiedLessons = (lessonsData || []).map((lesson, index) => {
         if (lesson.title === 'Saludos Básicos') {
           return { ...lesson, title: 'Desaguadero Marka' };
         }
@@ -129,6 +130,9 @@ export default function LearnTab() {
         }
         if (lesson.title === 'Colores') {
           return { ...lesson, title: 'Ilave Marka' };
+        }
+        if (index === 4) {
+          return { ...lesson, title: 'Conima Marka' };
         }
         return lesson;
       });
