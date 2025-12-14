@@ -78,6 +78,13 @@ const JULI_SUBLEVELS = [
   { name: "Repaso", position: [-16.215, -69.463] as [number, number], icon: "RotateCcw" }
 ];
 
+const ILAVE_SUBLEVELS = [
+  { name: "Familia", position: [-16.088, -69.640] as [number, number], icon: "Users" },
+  { name: "Partes del Cuerpo", position: [-16.086, -69.636] as [number, number], icon: "User" },
+  { name: "Verbos Basicos", position: [-16.089, -69.637] as [number, number], icon: "Activity" },
+  { name: "Repaso", position: [-16.087, -69.641] as [number, number], icon: "RotateCcw" }
+];
+
 function FlyToBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
   const map = useMap();
 
@@ -107,6 +114,7 @@ export default function LearnTab() {
   const [isDesaguaderoExpanded, setIsDesaguaderoExpanded] = useState(false);
   const [isYunguyoExpanded, setIsYunguyoExpanded] = useState(false);
   const [isJuliExpanded, setIsJuliExpanded] = useState(false);
+  const [isIlaveExpanded, setIsIlaveExpanded] = useState(false);
   const [showCulturaCard, setShowCulturaCard] = useState(true);
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
@@ -243,7 +251,8 @@ export default function LearnTab() {
       purple: '#a855f7',
       yellow: '#eab308',
       gray: '#9ca3af',
-      orange: '#f97316'
+      orange: '#f97316',
+      pink: '#ec4899'
     };
 
     const bgColor = isCompleted ? colorMap['yellow'] : (isUnlocked ? (colorMap[color] || colorMap['blue']) : colorMap['gray']);
@@ -326,12 +335,13 @@ export default function LearnTab() {
         />
       )}
 
-      {(isDesaguaderoExpanded || isYunguyoExpanded || isJuliExpanded) && (
+      {(isDesaguaderoExpanded || isYunguyoExpanded || isJuliExpanded || isIlaveExpanded) && (
         <button
           onClick={() => {
             setIsDesaguaderoExpanded(false);
             setIsYunguyoExpanded(false);
             setIsJuliExpanded(false);
+            setIsIlaveExpanded(false);
             setTargetBounds(mapBounds);
           }}
           className="absolute top-6 left-6 bg-white p-3 rounded-full shadow-lg z-[1000] hover:bg-gray-100 transition-colors"
@@ -386,6 +396,8 @@ export default function LearnTab() {
             if (idx === 3 && isYunguyoExpanded) return null;
             // Hide Juli Marka if expanded
             if (idx === 1 && isJuliExpanded) return null;
+            // Hide Ilave Marka if expanded
+            if (idx === 2 && isIlaveExpanded) return null;
 
             const lessonProgress = progress.find((p) => p.lesson_id === lesson.id);
             const isUnlocked = isLessonUnlocked(lesson);
@@ -408,7 +420,7 @@ export default function LearnTab() {
                         setIsJuliExpanded(true);
                       } else if (idx === 2) { // Ilave Marka
                         setTargetBounds(COLORES_BOUNDS);
-                        setTimeout(() => handleLessonClick(lesson), 2000);
+                        setIsIlaveExpanded(true);
                       } else if (idx === 3) { // Yunguyo Marka
                         setTargetBounds(FAMILIA_BOUNDS);
                         setIsYunguyoExpanded(true);
@@ -494,6 +506,28 @@ export default function LearnTab() {
               <Polyline
                 positions={JULI_SUBLEVELS.map(l => l.position)}
                 pathOptions={{ color: '#f97316', weight: 5, dashArray: '10, 10', opacity: 0.8 }}
+              />
+            </>
+          )}
+
+          {/* Ilave Sub-levels */}
+          {isIlaveExpanded && (
+            <>
+              {ILAVE_SUBLEVELS.map((subLevel, idx) => (
+                <Marker
+                  key={`ilave-sub-${idx}`}
+                  position={subLevel.position}
+                  icon={createCustomMarkerIcon(subLevel.name, subLevel.icon, true, false, 0, 'pink')}
+                  eventHandlers={{
+                    click: () => {
+                      alert(`Has seleccionado el nivel: ${subLevel.name}`);
+                    }
+                  }}
+                />
+              ))}
+              <Polyline
+                positions={ILAVE_SUBLEVELS.map(l => l.position)}
+                pathOptions={{ color: '#ec4899', weight: 5, dashArray: '10, 10', opacity: 0.8 }}
               />
             </>
           )}
