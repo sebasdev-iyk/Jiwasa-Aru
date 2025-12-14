@@ -431,7 +431,7 @@ export default function LearnTab() {
                 />
               ))}
               <Polyline
-                positions={DESAGUADERO_SUBLEVELS.map(l => l.position)}
+                positions={DESAGUADERO_SUBLEVELS.slice(0, 4).map(l => l.position)}
                 pathOptions={{ color: '#a855f7', weight: 4, dashArray: '10, 10', opacity: 0.8 }}
               />
             </>

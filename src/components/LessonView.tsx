@@ -90,9 +90,8 @@ export const COLORES_QUESTIONS: Question[] = [
     },
     {
         id: 3,
-        type: 'completion',
-        question: 'El color "Azul" en aymara se escribe: ______',
-        options: ['Larama', 'Ch\'iyara', 'Janq\'u'],
+        type: 'text-input',
+        question: 'El color "Azul" en aymara se escribe:',
         correctAnswer: 'Larama'
     },
     {
@@ -105,7 +104,7 @@ export const COLORES_QUESTIONS: Question[] = [
     {
         id: 5,
         type: 'ordering',
-        question: 'Ordena los colores del más claro al más oscuro:',
+        question: 'Ordena los colores del más claro al más oscuro (ejemplo lógico):',
         orderItems: [
             { id: 'o1', text: 'Janq\'u (Blanco)', order: 1 },
             { id: 'o2', text: 'Q\'illu (Amarillo)', order: 2 },
@@ -142,14 +141,14 @@ export const BONUS_QUESTIONS: Question[] = [
     {
         id: 4,
         type: 'multiple-choice',
-        question: 'En una publicidad de ropa, ¿cómo dirías "Poncho rojo"?',
+        question: 'En una publicidad de ropa, ¿cómo dirías "Poncho rojo"? (Recuerda el orden: Adjetivo + Sustantivo).',
         options: ['Punchu wila', 'Chupika punchu', 'Wila isi', 'Punchu chupika'],
         correctAnswer: 'Chupika punchu'
     },
     {
         id: 5,
         type: 'ordering',
-        question: 'Ordena la frase publicitaria "Vendo ropa nueva":',
+        question: 'Ordena la frase publicitaria "Vendo ropa nueva" (Sujeto tácito - Objeto - Verbo):',
         orderItems: [
             { id: 'o1', text: 'Machaqa (Nueva)', order: 1 },
             { id: 'o2', text: 'Isi (Ropa)', order: 2 },
