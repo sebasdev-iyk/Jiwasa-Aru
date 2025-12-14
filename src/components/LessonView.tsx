@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Check, RefreshCw, Heart } from 'lucide-react';
+import { X, Check, RefreshCw } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
@@ -263,9 +263,15 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
                     </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <div className="text-red-500 font-bold flex items-center">
-                        <Heart size={24} className="mr-2 fill-current" />
-                        {profile?.lives ?? 5}
+                    <div className="flex items-center space-x-1">
+                        {[...Array(profile?.lives ?? 5)].map((_, i) => (
+                            <img
+                                key={i}
+                                src="/sancallos/sancayoConRelleno.png"
+                                alt="Life"
+                                className="w-8 h-8 object-contain"
+                            />
+                        ))}
                     </div>
                     <div className="text-green-600 font-bold flex items-center">
                         <RefreshCw size={20} className="mr-2" />
