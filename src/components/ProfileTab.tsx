@@ -70,7 +70,7 @@ export default function ProfileTab() {
                   <div className="bg-red-500 p-2 rounded-lg">
                     <Heart className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-gray-600">Vidas</span>
+                  <span className="text-sm font-medium text-gray-600">Sancayos</span>
                 </div>
                 <div className="flex items-center space-x-1 mt-2">
                   {[...Array(profile?.lives ?? 0)].map((_, i) => (
