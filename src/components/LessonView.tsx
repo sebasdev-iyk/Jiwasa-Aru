@@ -363,15 +363,25 @@ export default function LessonView({ lessonTitle, onComplete, onClose }: LessonV
             if (profile && profile.lives > 0) {
                 const newLives = Math.max(0, profile.lives - 1);
                 try {
-                    await supabase
+                    const { error } = await supabase
                         .from('profiles')
                         .update({ lives: newLives })
                         .eq('id', profile.id);
 
-                    await refreshProfile();
+                    if (error) {
+                        console.error('Error updating lives:', error);
+                        alert('Error al actualizar vidas. Por favor, revisa tu conexión.');
+                    } else {
+                        await refreshProfile();
+                        // Optional: Add a toast or visual indicator here if needed
+                        // alert('¡Cuidado! Has perdido una vida.'); 
+                    }
                 } catch (error) {
                     console.error('Error updating lives:', error);
+                    alert('Ocurrió un error inesperado al actualizar las vidas.');
                 }
+            } else if (!profile) {
+                console.error('Profile not found when trying to deduct life');
             }
         }
     };
